@@ -6,11 +6,6 @@ TestDB::TestDB(QObject *parent) : QObject(parent)
     //初测试用
     initTest();
 
-    //测试用，之后删除
-    openDBStr = "测试位置";
-    emit testFailOpenSignal(openDBStr);
-
-
 
 }
 
@@ -38,19 +33,37 @@ void TestDB::initTest()
 //    db.setDatabaseName("DB_name");
 
     //打开数据库
-    //bool openDB = db.open();
+    bool openDB = db.open();
 
 
-
-    if(db.open())
+    //之后修改
+    if(openDB)
     {
-        //处理数据库没有打开时的情况
-        //openDBStr = "未打开数据库";
-        //发送信号给主窗体，显示出上面这句“未打开数据库"
-        //emit testFailOpenSignal(openDBStr);
-        QMessageBox::critical(0, tr("Error"), tr("未打开数据库"));
+        QMessageBox::information(0, tr("信息"), tr("已打开数据库"));
 
     }
+
+    //创建数据库后，再创建数据库表，并进行插入数据
+    QSqlQuery query;
+    //新建数据库表
+    query.exec("create table disa(id INTEGER,"
+               "name nvarchar(20),"
+               "hw INTEGER");
+    //向表中插入数据
+    query.exec("insert into disa(88,'shadi',55)");
+    query.exec("insert into disa(77, 'tiandi', 22)");
+
+
+    //查询数据库表中的数据
+    //QSqlQuery queryS;
+    query.exec("select soilType from disa");
+
+    int qsss = query.value(1).toInt();
+    QString qsi = query.value(2).toString();
+    //QString teStr = query.first().value(2).toString();
+
+    QMessageBox::information(0, tr("查询数据库表数据"), qsi);
+
 
 
 

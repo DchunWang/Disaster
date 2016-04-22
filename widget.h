@@ -38,8 +38,6 @@ public slots:
     void quitAll();
 
 
-    //测试用，数据库没有成功打开，在QLineEdit显示“未打开数据库”信息
-    void failOpenDB(QString);
     //测试用，新建一个数据库相关的对象
     void createTestDB();
 

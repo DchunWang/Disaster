@@ -8,6 +8,8 @@
 
 #include <QObject>
 #include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QVariant>
 
 class TestDB : public QObject
 {
@@ -19,15 +21,11 @@ public:
     void initTest();
 
 signals:
-    //测试用，看数据库是否打开,(把字符串传递给主窗体
-    void testFailOpenSignal(QString);
 
 public slots:
 
 public:
     //测试用，传递给其他窗体以显示具体的结果
-    //是否打开了数据库提示
-    QString openDBStr;
 
 };
 

@@ -4,8 +4,8 @@
 Login::Login(QWidget *parent, Qt::WindowFlags flags)
     : QWidget(parent, flags)
 {
-    //设置登录窗体的大小
-    setMinimumSize(300, 200);
+    //设置登录窗体的固定大小
+    setFixedSize(300, 200);
     //设置无边框、无法移动的登录窗体
     flags = Qt::CustomizeWindowHint;
     flags |= Qt::FramelessWindowHint;
@@ -66,7 +66,7 @@ void Login::quitLogin()
 //点击登录按钮，退出登录窗体，发送信号通知主窗体显示出来
 void Login::login()
 {
-    this->hide();
+    this->close();
 
     emit ToShowWidget();
 }
