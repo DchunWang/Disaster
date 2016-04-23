@@ -14,6 +14,7 @@ void TestDB::initTest()
 {
 
     //采用MySQl数据库，建立一个数据库连接对象？？？
+    //添加数据库驱动
     QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
 
     /** 问题一：
@@ -30,7 +31,7 @@ void TestDB::initTest()
     //设置数据库登录密码
     db.setPassword("47592kbtd@#Google");
     //设置数据库名
-    db.setDatabaseName("index_test");
+    db.setDatabaseName("mydata");
 
     db.open();
     //打开数据库
@@ -45,42 +46,38 @@ void TestDB::initTest()
     }
 
     //创建数据库后，再创建数据库表，并进行插入数据
-    QSqlQuery query;
+    QSqlQuery query(db);
     //新建数据库表
     query.exec("create table disa(id INT PRIMARY KEY UNIQUE AUTO_INCREMENT,"
                "name VARCHAR(20),"
-               "hw INT");
+               "hw INT);");
     //向表中插入数据
-    query.exec("insert into disa(name, hw) VALUE('shadi',55)");
-    query.exec("insert into disa(name, hw) VALUE('tiandi', 22)");
-    query.exec("insert into disa(name, hw) VLAUE('wang', 33)");
-    query.exec("insert into disa(name, hw) VALUE('dechun', 44)");
+    query.exec("insert into disa VALUE(1, 'shadi',55);");
+    query.exec("insert into disa VALUE(2, 'tiandi', 22);");
+    query.exec("insert into disa VLAUE(3, 'wang', 33);");
+    query.exec("insert into disa VALUE(4, 'dechun', 44);");
+
+
+
+
+    query.exec("select * from disa;");
+    QString total = "M";
+    //query.next()指向查找到的第一条记录，然后每次后移一个记录
+    while(query.next())
+    {
+        //query.value(0)是id的值，将其转换为int
+        int idInt = query.value(0).toInt();
+        QString nameStr = query.value(1).toString();
+        QString hwStr = query.value(2).toString();
+        total += "++" + nameStr + "++" + hwStr + "++" + QString::number(idInt);
+    }
+    //测试用
+    QMessageBox::information(0, tr("姓名"), total);
+
     if(query.isActive())
     {
         QMessageBox::information(0, tr("执行情况"), tr("执行了语句"));
     }
-
-    //查询数据库表中的数据
-//    //QSqlQuery queryS;
-//    query.exec("select name from disa");
-//    //query.first();
-//    QString tempStr = "T";
-
-//    while(query.next())
-//    {
-//        //int qsss = query.value(1).toInt();
-//        QString qsi = query.value(0).toString();
-//        //QString teStr = query.first().value(2).toString();
-//        tempStr += "+" + qsi;
-//    }
-
-//    //int qsss = query.value(1).toInt();
-//    //QString qsi = query.value(0).toString();
-//    //QString teStr = query.first().value(2).toString();
-//    QMessageBox::information(0, tr("查询数据库表数据"), tempStr);
-
-
-
 
 
 
@@ -96,6 +93,7 @@ void TestDB::initTest()
         totalDriver += dStr + "--";
     }
     //QMessageBox::information(0, tr("所有可用的数据库驱动"), totalDriver);
+
 
 
 
