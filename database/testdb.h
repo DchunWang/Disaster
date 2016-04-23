@@ -19,13 +19,21 @@ public:
 
     //初测试用函数
     void initTest();
+    //创建水资源班数据库及表
+    void createWaterResource();
+    //将传递过来的字符串原样返回
+    QString delegateString(QString);
+    QString transQString();
 
 signals:
+    //传递字符串给其他窗体
+    void giveString(QString);
 
 public slots:
 
 public:
     //测试用，传递给其他窗体以显示具体的结果
+    QString totalClassmate;
 
 };
 

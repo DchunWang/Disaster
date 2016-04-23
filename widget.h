@@ -8,6 +8,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QLabel>
+#include <QTextEdit>
 
 #include "login.h"
 #include "database/testdb.h"
@@ -40,6 +41,9 @@ public slots:
 
     //测试用，新建一个数据库相关的对象
     void createTestDB();
+    //测试用，将班级同学的名字显示在QTextEdit中
+    void showNameOnTextEdit();
+    void receiveString(QString);
 
 
 public:
@@ -59,10 +63,15 @@ public:
     QString W_testDBOpen;
     //测试用，点击按钮后就新建一个数据库相关的对象
     QPushButton *W_testBtn1;
+    //测试用，点击按钮后把水资源班同学的名字显示在QTextEdit中
+    QPushButton *W_testBtn2;
+    QTextEdit *W_testTextEdit;
 
 
     //测试用，看数据库要怎样与主窗体关联起来
     TestDB *W_testDB;
+    //如果上面这个创建了，bool值为true
+    bool createBool;
 
 
 

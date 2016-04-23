@@ -54,25 +54,36 @@ void TestDB::initTest()
     //向表中插入数据
     query.exec("insert into disa VALUE(1, 'shadi',55);");
     query.exec("insert into disa VALUE(2, 'tiandi', 22);");
-    query.exec("insert into disa VLAUE(3, 'wang', 33);");
+    query.exec("insert into disa VALUE(3, 'wang', 33);");
     query.exec("insert into disa VALUE(4, 'dechun', 44);");
 
+    //测试在SQL语句中使用变量
+    //int inpId = 5;
+    //QString inpName = "huang";
+    //int inpHw = 89;
+    //query.exec(QString("insert into disa VALUE(5, %1, 89);").arg(inpName));
+
+    query.prepare("insert into disa VALUE(:id, :name, :hw);");
+    query.bindValue(0, 5);
+    query.bindValue(1, "huang");
+    query.bindValue(2, 68);
+    query.exec();
 
 
 
     query.exec("select * from disa;");
     QString total = "M";
     //query.next()指向查找到的第一条记录，然后每次后移一个记录
-    while(query.next())
-    {
-        //query.value(0)是id的值，将其转换为int
-        int idInt = query.value(0).toInt();
-        QString nameStr = query.value(1).toString();
-        QString hwStr = query.value(2).toString();
-        total += "++" + nameStr + "++" + hwStr + "++" + QString::number(idInt);
-    }
+//    while(query.next())
+//    {
+//        //query.value(0)是id的值，将其转换为int
+//        int idInt = query.value(0).toInt();
+//        QString nameStr = query.value(1).toString();
+//        int hwStr = query.value(2).toInt();
+//        total += "++" + QString::number(idInt) + "++" +nameStr + "++" + QString::number(hwStr);
+//    }
     //测试用
-    QMessageBox::information(0, tr("姓名"), total);
+    //QMessageBox::information(0, tr("姓名"), total);
 
     if(query.isActive())
     {
@@ -81,6 +92,12 @@ void TestDB::initTest()
 
 
 
+    //query.exec("select * from disa where name = 'huang';");
+    while(query.next())
+    {
+        QString huangNameStr = query.value(1).toString();
+        //QMessageBox::information(0, tr("变量测试"), huangNameStr);
+    }
 
 
 
@@ -95,12 +112,109 @@ void TestDB::initTest()
     //QMessageBox::information(0, tr("所有可用的数据库驱动"), totalDriver);
 
 
+}
+
+void TestDB::createWaterResource()
+{
+    QSqlDatabase waterRDB = QSqlDatabase::addDatabase("QMYSQL", "secondCon");
+    //这样会创建一个新的数据库吗？？？
+    waterRDB.setDatabaseName("mydata");
+    waterRDB.setHostName("localhost");
+    waterRDB.setPort(3306);
+    waterRDB.setUserName("root");
+    waterRDB.setPassword("47592kbtd@#Google");
+    //要打开数据库？？？
+    waterRDB.open();
+
+    QSqlQuery wrQuery(waterRDB);
+    //先创建一个数据库的表
+    wrQuery.exec("create table waterclass"
+                 "(id INT PRIMARY KEY,"
+                 "number VARCHAR(20),"
+                 "name VARCHAR(100),"
+                 "sex VARCHAR(20),"
+                 "phone VARCHAR(20));");
+
+    //批量插入数据
+    wrQuery.prepare("INSERT INTO waterclass(id,number, name, sex, phone) VALUES(?, ?, ?, ?, ?)");
+    //对id列插入数据
+    QVariantList idList;
+    idList<< 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8<< 9 << 10 << 11 << 12 << 13 << 14 << 15;
+//    foreach(QVariant d, idList)
+//        wrQuery.bindValue(0, d);
+    wrQuery.addBindValue(idList);
+    //对number列插入数据
+    QVariantList numberList;
+    numberList<<"3033" << "3036" << "3043" << "3060" << "3066" <<
+                "3104" << "3113" << "3115" << "3116" << "3128"<<
+                "3130" << "3133" << "3134" << "3135" << "3137";
+//    foreach(QVariant nb, numberList)
+//        wrQuery.bindValue(1,nb);
+    wrQuery.addBindValue(numberList);
+    //对name列插入数据
+    QVariantList nameList;
+    nameList<<"杜屹笑" << "范丹丹" << "冯玉静" << "黄远征" << "赖斯麒" <<
+              "龙悦敏" <<"欧阳子健" <<"彭思涵"<<"皮成名"<<"孙文丹"<<
+              "谭铭欣" <<"田迪" <<"田珮力" <<"汪炜林" << "王德椿";
+//    foreach(QVariant n, nameList)
+//        wrQuery.bindValue(2, n);
+    wrQuery.addBindValue(nameList);
+    //对sex列插入数据
+    QVariantList sexList;
+    sexList<<"male" << "female" << "female" << "female" << "male" <<
+             "female" << "male" << "female" << "male" << "female"<<
+             "female" << "female" << "female" << "male" << "male";
+//    foreach(QVariant v, sexList)
+//        wrQuery.bindValue(3, v);
+    wrQuery.addBindValue(sexList);
+    //对phone列插入数据
+    QVariantList phoneList;
+    phoneList<<"613409" << "627855" << "613265" << "699142" << "629701" <<
+               "627920" << "622704" << "625753" << "615613" << "617537" <<
+               "616673" << "625930" << "625590" << "620381" << "628275";
+//    foreach(QVariant ph, phoneList)
+//        wrQuery.bindValue(4, ph);
+    wrQuery.addBindValue(phoneList);
+
+    wrQuery.finish();
+
+    totalClassmate = "只有开头吗";
+
+    if(!wrQuery.execBatch())
+    {
+        QMessageBox::critical(0, tr("警告"), tr("数据批处理错误！"));
+    }
+//    else
+//    {
+//        QSqlQuery otherQuery(waterRDB);
+//        otherQuery.exec("select * from waterclass;");
+        wrQuery.exec("select * from waterclass;");
+
+        while(wrQuery.next())
+        {
+            QString classmateName = wrQuery.value(2).toString();
+            totalClassmate +=  "\n" + classmateName ;
+
+            //delegateString(totalClassmate);
+        }
+
+        emit giveString(totalClassmate);
+//    }
 
 
 
 
 
 
+}
 
+QString TestDB::delegateString(QString s)
+{
+    return s;
+}
 
+QString TestDB::transQString()
+{
+    createWaterResource();
+    return delegateString(totalClassmate);
 }
