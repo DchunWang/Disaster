@@ -41,7 +41,7 @@ void TestDB::initTest()
     //之后修改
     if(openDB)
     {
-        QMessageBox::information(0, tr("信息"), tr("已打开数据库"));
+        //QMessageBox::information(0, tr("信息"), tr("已打开数据库"));
 
     }
 
@@ -87,7 +87,7 @@ void TestDB::initTest()
 
     if(query.isActive())
     {
-        QMessageBox::information(0, tr("执行情况"), tr("执行了语句"));
+        //QMessageBox::information(0, tr("执行情况"), tr("执行了语句"));
     }
 
 
@@ -112,6 +112,7 @@ void TestDB::initTest()
     //QMessageBox::information(0, tr("所有可用的数据库驱动"), totalDriver);
 
 
+
 }
 
 void TestDB::createWaterResource()
@@ -126,7 +127,7 @@ void TestDB::createWaterResource()
     //要打开数据库？？？
     if(waterRDB.open())
     {
-        QMessageBox::information(0, tr("数据库"), tr("waterRDB数据库打开了"));
+        //QMessageBox::information(0, tr("数据库"), tr("waterRDB数据库打开了"));
     }
 
     QSqlQuery wrQuery;
@@ -218,20 +219,8 @@ void TestDB::createWaterResource()
 
     if(wrQuery.isActive())
     {
-        QMessageBox::information(0, tr("查询"), tr("查询成功"));
+        //QMessageBox::information(0, tr("查询"), tr("查询成功"));
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     //wrQuery.finish();
@@ -250,7 +239,7 @@ void TestDB::createWaterResource()
 
     if(otherQuery.isValid())
     {
-        QMessageBox::information(0, tr("执行"), tr("执行了查询语句"));
+        //QMessageBox::information(0, tr("执行"), tr("执行了查询语句"));
     }
 
 
@@ -263,12 +252,23 @@ void TestDB::createWaterResource()
     }
 
         emit giveString(totalClassmate);
+
+
+    //设置secondWaterModel，以方便视图显示
+    secondWaterModel = new QSqlQueryModel;
+    secondWaterModel->setQuery("select * from secondWater;");
+    secondWaterModel->setHeaderData(0, Qt::Horizontal, tr("id"));
+    secondWaterModel->setHeaderData(1, Qt::Horizontal, tr("number"));
+    secondWaterModel->setHeaderData(2, Qt::Horizontal, tr("name"));
+    secondWaterModel->setHeaderData(3, Qt::Horizontal, tr("sex"));
+    secondWaterModel->setHeaderData(4, Qt::Horizontal, tr("phone"));
+
+    showDataWidget = new TestShowData();
+    showDataWidget->setModel(secondWaterModel);
+
+
+
 //    }
-
-
-
-
-
 
 }
 

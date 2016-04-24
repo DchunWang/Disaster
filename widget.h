@@ -9,6 +9,8 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QTextEdit>
+#include <QTableView>
+
 
 #include "login.h"
 #include "database/testdb.h"

@@ -9,7 +9,9 @@
 #include <QObject>
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QSqlQueryModel>
 #include <QVariant>
+#include "testshowdata.h"
 
 class TestDB : public QObject
 {
@@ -30,12 +32,16 @@ public:
 signals:
     //传递字符串给其他窗体
     void giveString(QString);
+    void givemodel(QSqlQueryModel*);
 
 public slots:
 
 public:
     //测试用，传递给其他窗体以显示具体的结果
     QString totalClassmate;
+    //传递给数据显示窗体View的model
+    QSqlQueryModel *secondWaterModel;
+    TestShowData *showDataWidget;
 
 };
 
