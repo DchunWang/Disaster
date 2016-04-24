@@ -25,6 +25,8 @@ public:
     QString delegateString(QString);
     QString transQString();
 
+
+
 signals:
     //传递字符串给其他窗体
     void giveString(QString);

@@ -124,25 +124,31 @@ void TestDB::createWaterResource()
     waterRDB.setUserName("root");
     waterRDB.setPassword("47592kbtd@#Google");
     //要打开数据库？？？
-    waterRDB.open();
+    if(waterRDB.open())
+    {
+        QMessageBox::information(0, tr("数据库"), tr("waterRDB数据库打开了"));
+    }
 
-    QSqlQuery wrQuery(waterRDB);
+    QSqlQuery wrQuery;
+    wrQuery.exec(tr("use mydata;"));
     //先创建一个数据库的表
-    wrQuery.exec("create table waterclass"
-                 "(id INT PRIMARY KEY,"
-                 "number VARCHAR(20),"
-                 "name VARCHAR(100),"
-                 "sex VARCHAR(20),"
-                 "phone VARCHAR(20));");
+//    wrQuery.exec("create table secondWater"
+//                 "(id VARCHAR(10),"
+//                 "number VARCHAR(100),"
+//                 "name VARCHAR(100),"
+//                 "sex VARCHAR(100),"
+//                 "phone VARCHAR(100));");
+
 
     //批量插入数据
-    wrQuery.prepare("INSERT INTO waterclass(id,number, name, sex, phone) VALUES(?, ?, ?, ?, ?)");
+    //wrQuery.prepare("INSERT INTO waterclass(id,number, name, sex, phone) VALUES(?, ?, ?, ?, ?)");
     //对id列插入数据
     QVariantList idList;
-    idList<< 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8<< 9 << 10 << 11 << 12 << 13 << 14 << 15;
+    //idList<< 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8<< 9 << 10 << 11 << 12 << 13 << 14 << 15;
+    idList<<"1"<<"2"<<"3"<<"4"<<"5"<<"6"<<"7"<<"8"<<"9"<<"10"<<"11"<<"12"<<"13"<<"14"<<"15";
 //    foreach(QVariant d, idList)
 //        wrQuery.bindValue(0, d);
-    wrQuery.addBindValue(idList);
+    //wrQuery.addBindValue(idList);
     //对number列插入数据
     QVariantList numberList;
     numberList<<"3033" << "3036" << "3043" << "3060" << "3066" <<
@@ -150,7 +156,7 @@ void TestDB::createWaterResource()
                 "3130" << "3133" << "3134" << "3135" << "3137";
 //    foreach(QVariant nb, numberList)
 //        wrQuery.bindValue(1,nb);
-    wrQuery.addBindValue(numberList);
+    //wrQuery.addBindValue(numberList);
     //对name列插入数据
     QVariantList nameList;
     nameList<<"杜屹笑" << "范丹丹" << "冯玉静" << "黄远征" << "赖斯麒" <<
@@ -158,7 +164,7 @@ void TestDB::createWaterResource()
               "谭铭欣" <<"田迪" <<"田珮力" <<"汪炜林" << "王德椿";
 //    foreach(QVariant n, nameList)
 //        wrQuery.bindValue(2, n);
-    wrQuery.addBindValue(nameList);
+   // wrQuery.addBindValue(nameList);
     //对sex列插入数据
     QVariantList sexList;
     sexList<<"male" << "female" << "female" << "female" << "male" <<
@@ -166,7 +172,7 @@ void TestDB::createWaterResource()
              "female" << "female" << "female" << "male" << "male";
 //    foreach(QVariant v, sexList)
 //        wrQuery.bindValue(3, v);
-    wrQuery.addBindValue(sexList);
+    //wrQuery.addBindValue(sexList);
     //对phone列插入数据
     QVariantList phoneList;
     phoneList<<"613409" << "627855" << "613265" << "699142" << "629701" <<
@@ -174,29 +180,87 @@ void TestDB::createWaterResource()
                "616673" << "625930" << "625590" << "620381" << "628275";
 //    foreach(QVariant ph, phoneList)
 //        wrQuery.bindValue(4, ph);
-    wrQuery.addBindValue(phoneList);
+    //wrQuery.addBindValue(phoneList);
 
-    wrQuery.finish();
+    //组装要批量插入的数据，使其成为一个QString,方便用一句insert语句就能将所有数据一次插入
+    int listCount = idList.size();
+    QString valueVar = " VALUES ";
+    for(int k = 0; k < listCount; ++k)
+    {
+        QVariant tempVar = "(" + idList.at(k).toString() + "," + numberList.at(k).toString() + "," +
+                            nameList.at(k).toString() + "," + sexList.at(k).toString() + "," + phoneList.at(k).toString() + ")";
+        valueVar += tempVar.toString();
+        if(k != listCount - 1)
+            valueVar += ",";
+    }
+
+    //将数据逐个插入数据库中
+    for(int m = 0; m < listCount; ++m)
+    {
+        wrQuery.prepare("INSERT INTO secondWater VALUE(:id, :number, :name, :sex, :phone);");
+        wrQuery.bindValue(0, idList.at(m));
+        wrQuery.bindValue(1, numberList.at(m));
+        wrQuery.bindValue(2, nameList.at(m));
+        wrQuery.bindValue(3, sexList.at(m));
+        wrQuery.bindValue(4, phoneList.at(m));
+        wrQuery.exec();
+    }
+
+    QString insertStr = "INSERT INTO secondWater(id, number,name,sex,phone)" + valueVar + ";";
+
+    QMessageBox::information(0, tr("测试insert语句是否组装完成"), insertStr);
+
+    //wrQuery.exec(insertStr);
+
+//    wrQuery.exec("insert into waterclass value('16','3233', '陈记臣','male','682832');");
+//    wrQuery.exec("insert into waterclass value('30','3246', '黄庆忠','male', '692932');");
+
+
+    if(wrQuery.isActive())
+    {
+        QMessageBox::information(0, tr("查询"), tr("查询成功"));
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //wrQuery.finish();
 
     totalClassmate = "只有开头吗";
 
-    if(!wrQuery.execBatch())
-    {
-        QMessageBox::critical(0, tr("警告"), tr("数据批处理错误！"));
-    }
+//    if(!wrQuery.execBatch())
+//    {
+//        QMessageBox::critical(0, tr("警告"), tr("数据批处理错误！"));
+//    }
 //    else
 //    {
-//        QSqlQuery otherQuery(waterRDB);
-//        otherQuery.exec("select * from waterclass;");
-        wrQuery.exec("select * from waterclass;");
+    QSqlQuery otherQuery;
+    otherQuery.exec("select * from secondWater;");
+    //wrQuery.exec("select * from waterclass;");
 
-        while(wrQuery.next())
-        {
-            QString classmateName = wrQuery.value(2).toString();
-            totalClassmate +=  "\n" + classmateName ;
+    if(otherQuery.isValid())
+    {
+        QMessageBox::information(0, tr("执行"), tr("执行了查询语句"));
+    }
 
-            //delegateString(totalClassmate);
-        }
+
+    while(otherQuery.next())
+    {
+        QString classmateName =otherQuery.value(2).toString();
+        totalClassmate +=  "\n" + classmateName ;
+
+        //delegateString(totalClassmate);
+    }
 
         emit giveString(totalClassmate);
 //    }
