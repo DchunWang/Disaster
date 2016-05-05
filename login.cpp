@@ -12,9 +12,11 @@ Login::Login(QWidget *parent, Qt::WindowFlags flags)
     setWindowFlags(flags);
     //设置登录界面的颜色
     QPalette p;
-    p.setColor(QPalette::Background, QColor(255, 255, 255, 255));
+    p.setColor(QPalette::Background, QColor(126, 206, 244, 255));
     setAutoFillBackground(true);
     setPalette(p);
+
+
 
     //初始化登录界面
     init();
@@ -25,18 +27,31 @@ void Login::init()
 {
     nameLabel = new QLabel(tr("账号:"));
     nameLineEdit = new QLineEdit;
+    nameLineEdit->setText(tr("admin"));
     pwdLabel = new QLabel(tr("密码:"));
     pwdLineEdit = new QLineEdit;
+    pwdLineEdit->setText(tr("123"));
     loginBtn = new QPushButton(tr("登录"));
     cancelBtn = new QPushButton(tr("取消"));
     connect(cancelBtn, SIGNAL(clicked()), this, SLOT(quitLogin()));
     connect(loginBtn, SIGNAL(clicked()), this, SLOT(login()));
 
+    titleBtn = new QPushButton;
+    titleBtn->setText(tr("山洪灾害关联规则挖掘"));
+    titleBtn->setFlat(true);
+    QFont ft;
+    ft.setPointSize(14);
+    titleBtn->setFont(ft);
+
+    titleLayout = new QHBoxLayout;
+    titleLayout->addWidget(titleBtn);
+
+
     npLayout = new QGridLayout;
-    npLayout->addWidget(nameLabel, 0, 0);
-    npLayout->addWidget(nameLineEdit, 0, 1);
-    npLayout->addWidget(pwdLabel, 1, 0);
-    npLayout->addWidget(pwdLineEdit, 1, 1);
+    npLayout->addWidget(nameLabel, 1, 0);
+    npLayout->addWidget(nameLineEdit, 1, 1);
+    npLayout->addWidget(pwdLabel, 2, 0);
+    npLayout->addWidget(pwdLineEdit, 2, 1);
 
     loginLayout = new QHBoxLayout;
     loginLayout->addStretch();
@@ -44,6 +59,7 @@ void Login::init()
     loginLayout->addWidget(cancelBtn);
 
     wholeLayout = new QVBoxLayout(this);
+    wholeLayout->addLayout(titleLayout);
     wholeLayout->addLayout(npLayout);
     wholeLayout->addLayout(loginLayout);
 

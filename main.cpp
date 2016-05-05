@@ -1,10 +1,12 @@
 #include "widget.h"
 #include <QApplication>
+#include <QStyleFactory>
 
 //#include "login.h"
 
 int main(int argc, char *argv[])
 {
+    QApplication::setStyle(QStyleFactory::create("Fusion"));
     QApplication a(argc, argv);
     Widget w;
 

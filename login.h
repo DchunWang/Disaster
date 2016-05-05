@@ -43,9 +43,12 @@ private:
     QLineEdit *pwdLineEdit;
     QPushButton *loginBtn;
     QPushButton *cancelBtn;
+    QPushButton *titleBtn;
 
 //    QHBoxLayout *nameLayout;
 //    QHBoxLayout *pwdLayout;
+
+    QHBoxLayout *titleLayout;
 
     QGridLayout *npLayout;
 

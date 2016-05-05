@@ -2,6 +2,7 @@
 #define WIDGET_H
 
 #include <QWidget>
+#include <QMainWindow>
 #include <QtSql>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -10,12 +11,22 @@
 #include <QLabel>
 #include <QTextEdit>
 #include <QTableView>
+#include <QStyleFactory>
+#include <QAction>
+#include <QMenu>
+#include <QMenuBar>
+#include <QStandardItemModel>
+#include <QSplitter>
+#include <QFrame>
+
+
+
 
 
 #include "login.h"
-#include "database/testdb.h"
+//#include "database/testdb.h"
 
-class Widget : public QWidget
+class Widget : public QMainWindow
 {
     Q_OBJECT
 
@@ -25,10 +36,16 @@ public:
 
     //初始化
     void initWidget();
+    //创建菜单栏
+    void createMenu();
+    //创建模型
+    void createModel();
+    //创建视图
+    void createView();
+
+
 
 signals:
-//    //隐藏本窗体信号，发送给main.cpp，
-//    void hideWidget();
 
     //通知main.cpp要退出主窗体，也即把整个程序都退出
     void quitWidget();
@@ -41,12 +58,6 @@ public slots:
     void quitAll();
 
 
-    //测试用，新建一个数据库相关的对象
-    void createTestDB();
-    //测试用，将班级同学的名字显示在QTextEdit中
-    void showNameOnTextEdit();
-    void receiveString(QString);
-
 
 public:
     //登录窗体，作为主窗体的子窗体
@@ -54,26 +65,49 @@ public:
 
     //主窗体的总体布局
     QVBoxLayout *mainLayout;
+    QSplitter *splitter;
+    QHBoxLayout *minLayout;
+
+
+    //菜单栏上的菜单及其中的命令
+    QMenu *fileMenu;
+    QAction *newAct;
+    QAction *openAct;
+    QAction *importAct;
+    QAction *outputAct;
+    QAction *exitAct;
+
+    QMenu *dataMenu;
+    QAction *redoAct;
+    QAction *undoAct;
+    QAction *handAct;
+
+    QMenu *mineMenu;
+    QAction *mineAct;
+
+    //模型视图———— 只针对数据库表的
+    QStandardItemModel *model;
+    QTableView *table;
+    //频繁项集的模型和视图
+    QStandardItemModel *freModel;
+    QTableView *freView;
+    //关联规则的模型和视图
+    QStandardItemModel *ruleModel;
+    QTableView *ruleView;
+
+    //最底下的最小支持度和最小置信度设置
+    QLabel *minsupLabel;
+    QLineEdit *minsupLineEdit;
+    QLabel *minconfLabel;
+    QLineEdit *minconfLineEdit;
+    QPushButton *dataMineBtn;
+    QFrame *minFrame;
 
 
 
 
-    /********************************以下成员变量做测试用，之后删除*****************/
-    //测试用，显示是否打开了数据库
-    QLineEdit *W_testLineEdit;
-    //测试用，看数据库是否打开了
-    QString W_testDBOpen;
-    //测试用，点击按钮后就新建一个数据库相关的对象
-    QPushButton *W_testBtn1;
-    //测试用，点击按钮后把水资源班同学的名字显示在QTextEdit中
-    QPushButton *W_testBtn2;
-    QTextEdit *W_testTextEdit;
 
 
-    //测试用，看数据库要怎样与主窗体关联起来
-    TestDB *W_testDB;
-    //如果上面这个创建了，bool值为true
-    bool createBool;
 
 
 

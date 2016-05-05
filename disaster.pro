@@ -16,10 +16,15 @@ TEMPLATE = app
 SOURCES += main.cpp\
         widget.cpp \
     login.cpp \
-    database/testdb.cpp \
-    database/testshowdata.cpp
+#    database/testdb.cpp \
+#    database/testshowdata.cpp
 
 HEADERS  += widget.h \
     login.h \
-    database/testdb.h \
-    database/testshowdata.h
+#    database/testdb.h \
+#    database/testshowdata.h
+
+DISTFILES +=
+
+RESOURCES += \
+    skin/src.qrc
