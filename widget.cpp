@@ -39,6 +39,14 @@ void Widget::initWidget()
     /*************************创建最底下的最小置信度和最小支持度设置**************************/
     minFrame = new QFrame;
     minLayout = new QHBoxLayout(minFrame);
+    itemChooseLabel = new QLabel(tr("挖掘因子："));
+    itemChoose = new QComboBox;
+    itemChoose->addItem(tr("组合因子"));
+    itemChoose->addItem(tr("暴雨强度"));
+    itemChoose->addItem(tr("坡度"));
+    itemChoose->addItem(tr("高程"));
+    itemChoose->addItem(tr("植被覆盖率"));
+
     minsupLabel = new QLabel(tr("最小支持度："));
     minsupLineEdit = new QLineEdit;
     minconfLabel = new QLabel(tr("最小置信度："));
@@ -46,6 +54,9 @@ void Widget::initWidget()
     dataMineBtn = new QPushButton;
     dataMineBtn->setText(tr("关联挖掘"));
 
+    minLayout->addStretch();
+    minLayout->addWidget(itemChooseLabel);
+    minLayout->addWidget(itemChoose);
     minLayout->addStretch();
     minLayout->addWidget(minsupLabel);
     minLayout->addWidget(minsupLineEdit);
@@ -106,15 +117,30 @@ void Widget::createMenu()
     fileMenu->addAction(exitAct);
 
     dataMenu = menuBar()->addMenu(tr("数据管理"));
-    redoAct = new QAction(tr("重做"),this);
+    redoAct = new QAction(tr("撤销"),this);
     undoAct = new QAction(tr("恢复"),this);
-    handAct = new QAction(tr("预处理"),this);
+
+    //handAct = new QAction(tr("数据表"),this);
     dataMenu->addAction(redoAct);
     dataMenu->addAction(undoAct);
-    dataMenu->addAction(handAct);
+
+    subDataMenu = dataMenu->addMenu(tr("数据表"));
+    disAct1 = new QAction(tr("灾害信息表"), this);
+    disAct2 = new QAction(tr("暴雨信息表"), this);
+    //disAct3 = new QAction(tr("高程信息表"), this);
+    disAct4 = new QAction(tr("坡度信息表"), this);
+    disAct5 = new QAction(tr("植被覆盖率表"), this);
+    subDataMenu->addAction(disAct1);
+    subDataMenu->addAction(disAct2);
+    //subDataMenu->addAction(disAct3);
+    subDataMenu->addAction(disAct4);
+    subDataMenu->addAction(disAct5);
+    //dataMenu->addAction(handAct);
 
     mineMenu = menuBar()->addMenu(tr("数据挖掘"));
     mineAct = new QAction(tr("关联挖掘"),this);
+    otherAct = new QAction(tr("预处理"), this);
+    mineMenu->addAction(otherAct);
     mineMenu->addAction(mineAct);
 }
 
@@ -122,23 +148,31 @@ void Widget::createMenu()
 void Widget::createModel()
 {
     //表视图的模型
-    model = new QStandardItemModel(10, 5, this);
+    model = new QStandardItemModel(20, 6, this);
     model->setHeaderData(0, Qt::Horizontal, tr("区域"));
     model->setHeaderData(1, Qt::Horizontal, tr("暴雨强度"));
     model->setHeaderData(2, Qt::Horizontal, tr("坡度"));
     model->setHeaderData(3, Qt::Horizontal, tr("高程"));
     model->setHeaderData(4, Qt::Horizontal, tr("植被覆盖率"));
+    model->setHeaderData(5, Qt::Horizontal, tr("山洪灾害"));
 
     //频繁项集的模型
-    freModel = new QStandardItemModel(5, 2, this);
+    freModel = new QStandardItemModel(20, 2, this);
     freModel->setHeaderData(0, Qt::Horizontal, tr("频繁项集"));
     freModel->setHeaderData(1, Qt::Horizontal, tr("支持度"));
 
     //关联规则的模型
-    ruleModel = new QStandardItemModel(5, 3, this);
+    ruleModel = new QStandardItemModel(20, 3, this);
     ruleModel->setHeaderData(0, Qt::Horizontal, tr("强规则"));
     ruleModel->setHeaderData(1, Qt::Horizontal, tr("支持度"));
     ruleModel->setHeaderData(2, Qt::Horizontal, tr("置信度"));
+
+    //暴雨信息的模型
+    ruinModel = new QStandardItemModel(20, 4, this);
+    ruinModel->setHeaderData(0, Qt::Horizontal, tr("序号"));
+    ruinModel->setHeaderData(1, Qt::Horizontal, tr("站名"));
+    ruinModel->setHeaderData(2, Qt::Horizontal, tr("高程"));
+    ruinModel->setHeaderData(3, Qt::Horizontal, tr("年均降雨量"));
 
 
 
@@ -161,9 +195,11 @@ void Widget::createView()
     ruleView = new QTableView;
     ruleView->setModel(ruleModel);
 
+    //暴雨信息视图
+    ruinView = new QTableView;
+    ruinView->setModel(ruinModel);
 
-
-
+    splitter->addWidget(ruinView);
     splitter->addWidget(table);
     splitter->addWidget(freView);
     splitter->addWidget(ruleView);

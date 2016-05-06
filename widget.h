@@ -18,10 +18,7 @@
 #include <QStandardItemModel>
 #include <QSplitter>
 #include <QFrame>
-
-
-
-
+#include <QComboBox>
 
 #include "login.h"
 //#include "database/testdb.h"
@@ -80,10 +77,17 @@ public:
     QMenu *dataMenu;
     QAction *redoAct;
     QAction *undoAct;
-    QAction *handAct;
+    //QAction *handAct;
+    QMenu *subDataMenu;
+    QAction *disAct1;
+    QAction *disAct2;
+    QAction *disAct3;
+    QAction *disAct4;
+    QAction *disAct5;
 
     QMenu *mineMenu;
     QAction *mineAct;
+    QAction *otherAct;
 
     //模型视图———— 只针对数据库表的
     QStandardItemModel *model;
@@ -94,6 +98,9 @@ public:
     //关联规则的模型和视图
     QStandardItemModel *ruleModel;
     QTableView *ruleView;
+    //暴雨信息的模型和视图
+    QStandardItemModel *ruinModel;
+    QTableView *ruinView;
 
     //最底下的最小支持度和最小置信度设置
     QLabel *minsupLabel;
@@ -102,6 +109,10 @@ public:
     QLineEdit *minconfLineEdit;
     QPushButton *dataMineBtn;
     QFrame *minFrame;
+
+    //挖掘因子下拉列表框
+    QLabel *itemChooseLabel;
+    QComboBox *itemChoose;
 
 
 
